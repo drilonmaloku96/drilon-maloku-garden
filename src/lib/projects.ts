@@ -14,7 +14,7 @@ export const PROJECTS: Project[] = [
     tags: ['dentistry', 'ai', 'programming'],
     url: 'https://cephalyzer.com',
     status: 'live',
-    thumbnail: '/drilon-maloku-garden/images/cephalyzer-thumb.png',
+    thumbnail: '/drilon-maloku-garden/assets/cephalyzer-thumb.png',
   },
   {
     title: 'Slides to PDF',
