@@ -21,7 +21,7 @@ export default function PostCard({ post, index, onNavigate }) {
         backdropFilter: 'blur(8px)',
         border: `1px solid ${hovered ? 'rgba(200,160,80,0.5)' : 'rgba(200,180,140,0.3)'}`,
         borderRadius: '12px',
-        padding: '20px 18px',
+        padding: '28px 24px',
         cursor: 'pointer',
         transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
         boxShadow: hovered ? '0 8px 24px rgba(100,80,40,0.1)' : '0 2px 8px rgba(100,80,40,0.04)',
@@ -30,7 +30,7 @@ export default function PostCard({ post, index, onNavigate }) {
         animationDelay: `${index * 40}ms`,
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px',
+        gap: '14px',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -74,7 +74,7 @@ export default function PostCard({ post, index, onNavigate }) {
           margin: 0,
           opacity: 0.85,
           display: '-webkit-box',
-          WebkitLineClamp: 3,
+          WebkitLineClamp: 5,
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
         }}>

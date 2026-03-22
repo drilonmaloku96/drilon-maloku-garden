@@ -33,8 +33,8 @@ export default function ProjectsView({ projects }) {
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '10px',
-                padding: '20px',
+                gap: '14px',
+                padding: '28px 24px',
                 borderRadius: '16px',
                 border: '1px solid rgba(130, 50, 60, 0.18)',
                 background: 'rgba(255,255,255,0.42)',
