@@ -3,7 +3,8 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 
 export default defineConfig({
-  site: 'https://drilonmaloku.com',
+  site: 'https://drilonmaloku96.github.io',
+  base: '/drilon-maloku-garden',
   output: 'static',
   integrations: [react()],
 });
