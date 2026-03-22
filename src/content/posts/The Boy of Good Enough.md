@@ -1,3 +1,11 @@
+---
+title: "The Boy of Good Enough"
+date: 2026-03-22
+type: creative
+language: english
+tags: [creative-writing]
+related: []
+---
 
 In a house on a hill lived a boy, don’t you know,
 Who did things sort-of-kind-of wherever he’d go.

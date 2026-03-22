@@ -1,3 +1,11 @@
+---
+title: "What the Hell Did I Go to University For?"
+date: 2026-03-22
+type: article
+language: english
+tags: [education, dentistry]
+related: []
+---
 
 It is rather interesting. How you can waste six years, strike that, nearly 7 years for a university diploma to be crowned a dentist and yet not have any of the needed skills to be a good one. I was very good at reciting definitions of diseases, their symptoms and their treatment options from memory, while not having done any of the treatments from A to Z myself. It was a very refined university in shrewdly avoiding actually teaching you anything – They make sure that every phase of the treatment is not seen through by one single Student. Each student got cases haphazardly assigned to them and many of them missed crucial phases of the whole process of treating one dental situation.
 

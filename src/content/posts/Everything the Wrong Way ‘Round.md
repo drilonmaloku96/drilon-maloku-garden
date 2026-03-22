@@ -1,3 +1,11 @@
+---
+title: "Everything the Wrong Way 'Round"
+date: 2026-03-22
+type: creative
+language: english
+tags: [creative-writing]
+related: []
+---
 
 My dad takes the trains in a curious way,
 He asks every minute, “Which one’s today?”
