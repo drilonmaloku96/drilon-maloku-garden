@@ -4,15 +4,17 @@ export interface Project {
   tags: string[];
   url: string;
   status: 'live' | 'beta' | 'in-progress';
+  thumbnail?: string;
 }
 
 export const PROJECTS: Project[] = [
   {
-    title: 'Cephalometric Analysis',
-    description: 'AI-assisted cephalometric tracing and landmark analysis for orthodontic diagnosis.',
+    title: 'Cephalyzer',
+    description: 'Professional cephalometric analysis that runs entirely in the browser. Advanced orthodontic X-ray landmark tracing — your images never leave your device.',
     tags: ['dentistry', 'ai', 'programming'],
-    url: '#',
-    status: 'in-progress',
+    url: 'https://cephalyzer.com',
+    status: 'live',
+    thumbnail: '/drilon-maloku-garden/images/cephalyzer-thumb.png',
   },
   {
     title: 'Slides to PDF',

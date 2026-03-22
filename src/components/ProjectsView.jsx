@@ -58,6 +58,28 @@ export default function ProjectsView({ projects }) {
                 e.currentTarget.style.borderColor = 'rgba(130,50,60,0.18)';
               } : undefined}
             >
+              {/* Thumbnail */}
+              {project.thumbnail && (
+                <div style={{
+                  margin: '-36px -28px 0',
+                  borderRadius: '16px 16px 0 0',
+                  overflow: 'hidden',
+                  height: '180px',
+                }}>
+                  <img
+                    src={project.thumbnail}
+                    alt={`${project.title} screenshot`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'top',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              )}
+
               {/* Title row */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                 <h3 style={{
