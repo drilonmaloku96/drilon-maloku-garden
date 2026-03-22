@@ -1,5 +1,5 @@
 ---
-title: AI Is Scary
+title: The Unexamined Life
 date: 2026-03-22
 type: article
 tags:

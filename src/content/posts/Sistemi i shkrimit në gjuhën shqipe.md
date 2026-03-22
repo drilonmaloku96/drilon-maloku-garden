@@ -7,6 +7,7 @@ tags:
   - education
   - language
   - albanian
+  - analysis
 language: albanian
 related: []
 ---
