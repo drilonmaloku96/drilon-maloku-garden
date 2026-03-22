@@ -30,16 +30,16 @@ function wrapText(ctx, text, maxWidth, lineHeight, maxLines) {
 }
 
 export default function BubbleCanvas({ posts, onNavigate, visible }) {
+  const MAX_BUBBLES = 14;
+  const SPAWN_INTERVAL = 900; // ms
+
   const canvasRef = useRef(null);
   const bubblesRef = useRef([]);
   const rafRef = useRef(null);
   const hoverRef = useRef(null);
-  const spawnTimerRef = useRef(0);
+  const spawnTimerRef = useRef(SPAWN_INTERVAL); // pre-filled so first bubble fires on frame 1
   const postQueueRef = useRef([]);
   const queueIndexRef = useRef(0);
-
-  const MAX_BUBBLES = 14;
-  const SPAWN_INTERVAL = 900; // ms
 
   useEffect(() => {
     if (!posts.length) return;
@@ -82,8 +82,8 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
       radius,
       hue,
       sat,
-      vx: randomBetween(-1.2, 1.2),          // wide erratic horizontal range
-      vy: -randomBetween(4.5, 7.0),           // burst upward fast, then decelerate
+      vx: randomBetween(-1.2, 1.2),
+      vy: -randomBetween(6.0, 9.0),           // initial burst — position-based speed takes over
       wobbleOffset: Math.random() * Math.PI * 2,
       wobbleSpeed: randomBetween(0.018, 0.035), // fast erratic wobble
       wobbleAmplitude: randomBetween(0.012, 0.028), // per-bubble amplitude
@@ -151,10 +151,9 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
         // Occasional random kick for extra erraticness
         if (Math.random() < 0.008) b.vx += randomBetween(-0.6, 0.6);
         b.vx *= 0.992;
-        // Decelerate only within 1000px of the top — full speed below that
-        if (b.y < 1000) {
-          b.vy = b.vy * 0.978 + (-0.4) * 0.022;
-        }
+        // Velocity scales with distance from top: fast near bottom, slow near top
+        const targetVy = -(0.5 + Math.max(0, b.y / logicalH) * 7.5);
+        b.vy += (targetVy - b.vy) * 0.05;
         b.x += b.vx;
         b.y += b.vy;
 
@@ -170,7 +169,7 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
 
         // Fade in — only once bubble enters visible area
         if (b.y < logicalH + b.radius && b.opacity < 1) {
-          b.opacity = Math.min(1, b.opacity + 0.018);
+          b.opacity = Math.min(1, b.opacity + 0.055);
         }
 
         // Fade out near top
@@ -220,8 +219,8 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
               bb.vy -= impulse * ny;
 
               // Preserve upward momentum after collision
-              if (a.vy > -0.4) a.vy = -0.4;
-              if (bb.vy > -0.4) bb.vy = -0.4;
+              if (a.vy > -0.5) a.vy = -0.5;
+              if (bb.vy > -0.5) bb.vy = -0.5;
             }
           }
         }
