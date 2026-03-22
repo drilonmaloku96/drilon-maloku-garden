@@ -21,7 +21,7 @@ export default function KnowledgeGarden({ posts }) {
       setGridVisible(true);
       setCanvasOpacity(0);
       // Clean the URL without reloading
-      window.history.replaceState({}, '', '/');
+      window.history.replaceState({}, '', base + '/');
     }
   }, []);
 
@@ -42,9 +42,11 @@ export default function KnowledgeGarden({ posts }) {
     }
   }, [posts, activeFilter, sortOrder]);
 
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
   const navigate = useCallback((path) => {
-    window.location.href = path;
-  }, []);
+    window.location.href = base + path;
+  }, [base]);
 
   const goToBubbles = useCallback(() => {
     setGridVisible(false);
