@@ -65,16 +65,13 @@ export default function ProjectsView({ projects }) {
                   margin: '-36px -28px 0',
                   borderRadius: '16px 16px 0 0',
                   overflow: 'hidden',
-                  height: '180px',
                 }}>
                   <img
                     src={project.thumbnail}
                     alt={`${project.title} screenshot`}
                     style={{
                       width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'top',
+                      height: 'auto',
                       display: 'block',
                     }}
                   />

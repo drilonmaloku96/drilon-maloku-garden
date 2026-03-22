@@ -50,7 +50,8 @@ function extractFirstImage(body: string): string | undefined {
 
 function makeExcerpt(body: string): string {
   const cleaned = body
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')        // strip images
+    .replace(/!\[\[[^\]]+\]\]/g, '')             // strip Obsidian ![[image]] syntax
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')        // strip standard ![alt](url) images
     .replace(/\[\[([^\]]+)\]\]/g, (_m, t) => t.split('|').pop() ?? t)
     .replace(/#{1,6}\s/g, '')
     .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
