@@ -1,8 +1,11 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import BubbleCanvas from './BubbleCanvas.jsx';
 import GridView from './GridView.jsx';
+import ProjectsView from './ProjectsView.jsx';
 import FilterBar from './FilterBar.jsx';
 import LanguageDropdown from './LanguageDropdown.jsx';
+
+import { PROJECTS } from '../lib/projects';
 
 export default function KnowledgeGarden({ posts }) {
   const [activeFilter, setActiveFilter] = useState('bubbles');
@@ -85,9 +88,11 @@ export default function KnowledgeGarden({ posts }) {
   }, [goToBubbles, goToGrid]);
 
   const isGrid = !showBubbles && gridVisible;
+  const isProjects = isGrid && activeFilter === 'projects';
 
   // Label for what's currently shown in grid
   const gridLabel = useMemo(() => {
+    if (activeFilter === 'projects') return `Projects (${PROJECTS.length})`;
     if (activeFilter === 'order') return `All posts (${filteredPosts.length})`;
     return `#${activeFilter} (${filteredPosts.length})`;
   }, [activeFilter, filteredPosts.length]);
@@ -180,7 +185,7 @@ export default function KnowledgeGarden({ posts }) {
           />
         </div>
 
-        {/* Grid view */}
+        {/* Grid / Projects view */}
         {gridVisible && (
           <div style={{
             position: 'absolute',
@@ -188,7 +193,10 @@ export default function KnowledgeGarden({ posts }) {
             overflowY: 'auto',
             animation: 'fadeIn 0.4s ease',
           }}>
-            <GridView posts={filteredPosts} onNavigate={navigate} />
+            {isProjects
+              ? <ProjectsView projects={PROJECTS} />
+              : <GridView posts={filteredPosts} onNavigate={navigate} />
+            }
           </div>
         )}
       </div>

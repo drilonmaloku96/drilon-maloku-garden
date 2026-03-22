@@ -134,6 +134,28 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
     };
   }
 
+  function projectsBtn(isActive) {
+    return {
+      fontFamily: "'Courier New', monospace",
+      fontSize: '12px',
+      letterSpacing: '1px',
+      textTransform: 'uppercase',
+      padding: '7px 18px',
+      borderRadius: '20px',
+      border: isActive
+        ? '1.5px solid rgba(130,50,60,0.75)'
+        : '1.5px solid rgba(130,50,60,0.35)',
+      background: isActive
+        ? 'rgba(130,50,60,0.16)'
+        : 'rgba(130,50,60,0.07)',
+      color: isActive ? '#b8415a' : '#9e4455',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      whiteSpace: 'nowrap',
+      fontWeight: '700',
+    };
+  }
+
   function tagBtn(tag) {
     const isActive = activeFilter === tag;
     const { bg, text } = getTagColor(tag);
@@ -162,13 +184,16 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
       padding: '0 24px',
     }}>
 
-      {/* Special golden buttons */}
+      {/* Special golden buttons + Projects */}
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
         <button onClick={() => onFilter('bubbles')} style={specialBtn('bubbles')}>
           ◎ Thoughts in Bubbles
         </button>
         <button onClick={() => onFilter('order')} style={specialBtn('order')}>
           ≡ Thoughts in Order
+        </button>
+        <button onClick={() => onFilter('projects')} style={projectsBtn(activeFilter === 'projects')}>
+          ◈ Projects
         </button>
       </div>
 

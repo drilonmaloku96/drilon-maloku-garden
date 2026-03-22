@@ -17,9 +17,7 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
   const ref = useRef(null);
 
   const languages = [...new Set(posts.map(p => p.language || 'english'))].sort();
-  const allSelected = selected.length === 0;
 
-  // Close on outside click — use 'click' not 'mousedown' to avoid race with button
   useEffect(() => {
     if (!open) return;
     const handler = (e) => {
@@ -30,25 +28,20 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
   }, [open]);
 
   function toggleOpen(e) {
-    e.stopPropagation(); // prevent document click handler from immediately closing
+    e.stopPropagation();
     setOpen(o => !o);
   }
 
-  function toggle(lang) {
+  function toggle(lang, e) {
+    e.stopPropagation();
     if (selected.includes(lang)) {
-      const next = selected.filter(l => l !== lang);
-      onChange(next.length === languages.length ? [] : next);
+      onChange(selected.filter(l => l !== lang));
     } else {
-      const next = [...selected, lang];
-      onChange(next.length === languages.length ? [] : next);
+      onChange([...selected, lang]);
     }
   }
 
-  const btnLabel = allSelected
-    ? 'All languages'
-    : selected.length === 1
-      ? `${FLAG[selected[0]] ?? '🌐'} ${label(selected[0])}`
-      : `${selected.length} languages`;
+  const anyActive = selected.length > 0;
 
   return (
     <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
@@ -61,21 +54,21 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
           textTransform: 'uppercase',
           padding: '5px 14px',
           borderRadius: '20px',
-          border: open || !allSelected
+          border: open || anyActive
             ? '1px solid rgba(196,160,80,0.7)'
             : '1px solid rgba(200,180,140,0.35)',
-          background: open || !allSelected
+          background: open || anyActive
             ? 'rgba(196,160,80,0.12)'
             : 'rgba(255,255,255,0.35)',
-          color: allSelected ? '#a0906a' : '#c4a050',
+          color: anyActive ? '#c4a050' : '#a0906a',
           cursor: 'pointer',
           transition: 'border-color 0.15s, background 0.15s, color 0.15s',
           backdropFilter: 'blur(6px)',
-          minWidth: '140px',   // fixed width prevents jitter when label changes
+          minWidth: '110px',
           textAlign: 'center',
         }}
       >
-        {btnLabel} {open ? '▲' : '▼'}
+        Language {open ? '▲' : '▼'}
       </button>
 
       {open && (
@@ -94,56 +87,55 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
           zIndex: 100,
           animation: 'dropdownOpen 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         }}>
-          {/* All languages */}
-          <button
-            onClick={(e) => { e.stopPropagation(); onChange([]); setOpen(false); }}
-            style={{
-              display: 'block',
-              width: '100%',
-              textAlign: 'left',
-              padding: '7px 12px',
-              borderRadius: '10px',
-              border: 'none',
-              background: allSelected ? 'rgba(196,160,80,0.15)' : 'transparent',
-              color: allSelected ? '#c4a050' : '#6a5d45',
-              fontFamily: "'Courier New', monospace",
-              fontSize: '11px',
-              letterSpacing: '1px',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              marginBottom: '4px',
-            }}
-          >
-            {allSelected ? '✓ ' : '\u00a0\u00a0'}All languages
-          </button>
-
-          <div style={{ height: '1px', background: 'rgba(200,180,140,0.3)', margin: '4px 8px' }} />
-
           {languages.map(lang => {
-            const active = selected.includes(lang);
+            const checked = selected.includes(lang);
             return (
-              <button
+              <label
                 key={lang}
-                onClick={(e) => { e.stopPropagation(); toggle(lang); }}
+                onClick={(e) => toggle(lang, e)}
                 style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
-                  padding: '7px 12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '8px 12px',
                   borderRadius: '10px',
-                  border: 'none',
-                  background: active ? 'rgba(196,160,80,0.15)' : 'transparent',
-                  color: active ? '#c4a050' : '#6a5d45',
+                  background: checked ? 'rgba(196,160,80,0.12)' : 'transparent',
+                  cursor: 'pointer',
+                  transition: 'background 0.12s',
+                  userSelect: 'none',
+                }}
+              >
+                {/* Custom checkbox */}
+                <span style={{
+                  width: '16px',
+                  height: '16px',
+                  borderRadius: '4px',
+                  border: checked
+                    ? '1.5px solid rgba(196,160,80,0.9)'
+                    : '1.5px solid rgba(160,140,100,0.45)',
+                  background: checked ? 'rgba(196,160,80,0.25)' : 'rgba(255,255,255,0.5)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  fontSize: '10px',
+                  color: '#c4a050',
+                  transition: 'all 0.12s',
+                }}>
+                  {checked ? '✓' : ''}
+                </span>
+                <span style={{ fontSize: '16px', lineHeight: 1 }}>{FLAG[lang] ?? '🌐'}</span>
+                <span style={{
                   fontFamily: "'Courier New', monospace",
                   fontSize: '11px',
                   letterSpacing: '1px',
                   textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  transition: 'background 0.12s, color 0.12s',
-                }}
-              >
-                {active ? '✓ ' : '\u00a0\u00a0'}{FLAG[lang] ?? '🌐'} {label(lang)}
-              </button>
+                  color: checked ? '#c4a050' : '#6a5d45',
+                  transition: 'color 0.12s',
+                }}>
+                  {label(lang)}
+                </span>
+              </label>
             );
           })}
         </div>
