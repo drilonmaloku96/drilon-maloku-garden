@@ -11,6 +11,7 @@ export interface Post {
   related: string[];          // wikilinks + frontmatter, bidirectional (shown on article page)
   wikilinkRelated: string[];  // same as related — kept as explicit alias for article page clarity
   wikilinks: string[];        // raw [[...]] targets found in body
+  language: string;
 }
 
 
@@ -97,6 +98,7 @@ export async function getAllPosts(): Promise<Post[]> {
       excerpt: makeExcerpt(body),
       type: (entry.data.type as Post['type']) ?? 'article',
       tags: (entry.data.tags as string[]) ?? [],
+      language: (entry.data.language as string) ?? 'english',
       related: allRelated,
       wikilinkRelated: allRelated, // will be updated to bidirectional below
       wikilinks: rawLinks,

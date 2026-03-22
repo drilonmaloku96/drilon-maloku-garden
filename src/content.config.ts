@@ -9,6 +9,7 @@ const posts = defineCollection({
     type: z.enum(['article', 'project', 'creative', 'note']).default('article'),
     tags: z.array(z.string()).default([]),
     related: z.array(z.string()).default([]),
+    language: z.string().default('english'),
   }),
 });
 

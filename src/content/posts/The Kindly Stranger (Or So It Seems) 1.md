@@ -3,8 +3,9 @@ title: The Kindly Stranger (Or So It Seems)
 date: 2026-03-22
 type: creative
 tags:
-  - creative-writing
   - politics
+  - fiction
+language: english
 related: []
 ---
 

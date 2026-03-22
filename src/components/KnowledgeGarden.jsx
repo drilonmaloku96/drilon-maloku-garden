@@ -2,10 +2,12 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import BubbleCanvas from './BubbleCanvas.jsx';
 import GridView from './GridView.jsx';
 import FilterBar from './FilterBar.jsx';
+import LanguageDropdown from './LanguageDropdown.jsx';
 
 export default function KnowledgeGarden({ posts }) {
   const [activeFilter, setActiveFilter] = useState('bubbles');
   const [sortOrder, setSortOrder] = useState('newest');
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [showBubbles, setShowBubbles] = useState(true);
   const [canvasOpacity, setCanvasOpacity] = useState(1);
   const [gridVisible, setGridVisible] = useState(false);
@@ -28,10 +30,14 @@ export default function KnowledgeGarden({ posts }) {
   const filteredPosts = useMemo(() => {
     let list;
     if (activeFilter === 'bubbles' || activeFilter === 'order') {
-      list = posts; // all posts
+      list = posts;
     } else {
-      // tag filter
       list = posts.filter((p) => p.tags?.includes(activeFilter));
+    }
+
+    // Apply language filter (empty = all)
+    if (selectedLanguages.length > 0) {
+      list = list.filter((p) => selectedLanguages.includes(p.language ?? 'english'));
     }
 
     switch (sortOrder) {
@@ -117,10 +123,15 @@ export default function KnowledgeGarden({ posts }) {
           lineHeight: 1.6,
           color: '#6a5d45',
           maxWidth: '440px',
-          margin: '0 auto',
+          margin: '0 auto 12px',
         }}>
           Dentist. Builder. Writer. Explorer of ideas across borders and disciplines.
         </p>
+        <LanguageDropdown
+          posts={posts}
+          selected={selectedLanguages}
+          onChange={setSelectedLanguages}
+        />
       </header>
 
       {/* Filter bar */}
@@ -163,7 +174,7 @@ export default function KnowledgeGarden({ posts }) {
           pointerEvents: showBubbles ? 'auto' : 'none',
         }}>
           <BubbleCanvas
-            posts={posts}
+            posts={filteredPosts}
             onNavigate={navigate}
             visible={showBubbles}
           />

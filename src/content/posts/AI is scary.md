@@ -1,11 +1,12 @@
 ---
-title: The Unexamined Life
+title: AI Is Scary
 date: 2026-03-22
 type: article
 tags:
   - ai
   - philosophy
   - writing
+language: english
 related: []
 ---
 

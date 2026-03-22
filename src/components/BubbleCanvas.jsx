@@ -83,7 +83,7 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
       hue,
       sat,
       vx: randomBetween(-1.2, 1.2),          // wide erratic horizontal range
-      vy: -randomBetween(1.6, 2.6),           // fast upward
+      vy: -randomBetween(4.5, 7.0),           // burst upward fast, then decelerate
       wobbleOffset: Math.random() * Math.PI * 2,
       wobbleSpeed: randomBetween(0.018, 0.035), // fast erratic wobble
       wobbleAmplitude: randomBetween(0.012, 0.028), // per-bubble amplitude
@@ -151,6 +151,8 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
         // Occasional random kick for extra erraticness
         if (Math.random() < 0.008) b.vx += randomBetween(-0.6, 0.6);
         b.vx *= 0.992;
+        // Decelerate upward — converge toward a slow drift of -0.4 px/frame
+        b.vy = b.vy * 0.978 + (-0.4) * 0.022;
         b.x += b.vx;
         b.y += b.vy;
 
@@ -216,8 +218,8 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
               bb.vy -= impulse * ny;
 
               // Preserve upward momentum after collision
-              if (a.vy > -0.8) a.vy = -0.8;
-              if (bb.vy > -0.8) bb.vy = -0.8;
+              if (a.vy > -0.4) a.vy = -0.4;
+              if (bb.vy > -0.4) bb.vy = -0.4;
             }
           }
         }

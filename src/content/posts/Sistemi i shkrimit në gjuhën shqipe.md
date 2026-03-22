@@ -1,8 +1,13 @@
 ---
-title: "Sistemi i shkrimit në gjuhën shqipe"
+title: Sistemi i shkrimit në gjuhën shqipe
 date: 2026-03-22
 type: article
-tags: [kosovo, education, language]
+tags:
+  - kosovo
+  - education
+  - language
+  - albanian
+language: albanian
 related: []
 ---
 

@@ -3,6 +3,7 @@ title: "Dinner with a Horse"
 date: 2026-03-22
 type: creative
 tags: [creative-writing]
+language: english
 related: []
 ---
 

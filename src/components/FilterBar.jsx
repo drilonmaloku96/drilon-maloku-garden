@@ -1,4 +1,7 @@
+import { useState, useEffect, useRef } from 'react';
 import { getTagColor } from '../lib/colors';
+
+const TOP_TAGS = 3;
 
 function deriveTagCounts(posts) {
   const counts = new Map();
@@ -12,8 +15,101 @@ function deriveTagCounts(posts) {
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
 }
 
+function TagMoreDropdown({ tags, activeFilter, onFilter }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const anyActive = tags.some(({ tag }) => tag === activeFilter);
+
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          fontFamily: "'Courier New', monospace",
+          fontSize: '11px',
+          letterSpacing: '0.5px',
+          padding: '4px 11px',
+          borderRadius: '20px',
+          border: anyActive
+            ? '1px solid rgba(196,160,80,0.8)'
+            : '1px solid rgba(200,180,140,0.4)',
+          background: anyActive
+            ? 'rgba(196,160,80,0.15)'
+            : 'rgba(255,255,255,0.3)',
+          color: anyActive ? '#c4a050' : '#a0906a',
+          cursor: 'pointer',
+          transition: 'all 0.15s ease',
+          backdropFilter: 'blur(6px)',
+        }}
+      >
+        {open ? '✕' : `+${tags.length}`}
+      </button>
+
+      {open && (
+        <div style={{
+          position: 'absolute',
+          top: 'calc(100% + 8px)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(250,244,228,0.97)',
+          backdropFilter: 'blur(14px)',
+          border: '1px solid rgba(200,180,140,0.4)',
+          borderRadius: '16px',
+          boxShadow: '0 8px 32px rgba(80,60,20,0.18)',
+          padding: '10px 8px',
+          minWidth: '180px',
+          zIndex: 100,
+          animation: 'fadeIn 0.15s ease',
+        }}>
+          {tags.map(({ tag, count }) => {
+            const isActive = activeFilter === tag;
+            const { bg, text } = getTagColor(tag);
+            return (
+              <button
+                key={tag}
+                onClick={() => { onFilter(tag); setOpen(false); }}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  width: '100%',
+                  textAlign: 'left',
+                  padding: '7px 12px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  background: isActive ? bg.replace(/[\d.]+\)$/, '0.22)') : 'transparent',
+                  color: isActive ? text : '#6a5d45',
+                  fontFamily: "'Courier New', monospace",
+                  fontSize: '11px',
+                  letterSpacing: '0.5px',
+                  textTransform: 'lowercase',
+                  cursor: 'pointer',
+                  gap: '8px',
+                }}
+              >
+                <span>{isActive ? '✓ ' : ''}{tag}</span>
+                <span style={{ opacity: 0.5, fontSize: '10px' }}>{count}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function FilterBar({ posts, activeFilter, onFilter, showSort, sortOrder, onSort, onBack }) {
   const tagCounts = deriveTagCounts(posts);
+  const topTags = tagCounts.slice(0, TOP_TAGS);
+  const moreTags = tagCounts.slice(TOP_TAGS);
 
   function specialBtn(key) {
     const isActive = activeFilter === key;
@@ -76,20 +172,28 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
         </button>
       </div>
 
-      {/* Tag pills — auto-derived from vault, auto-colored */}
+      {/* Top tags + more dropdown */}
       {tagCounts.length > 0 && (
         <div style={{
           display: 'flex',
           gap: '6px',
           flexWrap: 'wrap',
           justifyContent: 'center',
+          alignItems: 'center',
           maxWidth: '760px',
         }}>
-          {tagCounts.map(({ tag, count }) => (
+          {topTags.map(({ tag, count }) => (
             <button key={tag} onClick={() => onFilter(tag)} style={tagBtn(tag)}>
               {tag} <span style={{ opacity: 0.6 }}>({count})</span>
             </button>
           ))}
+          {moreTags.length > 0 && (
+            <TagMoreDropdown
+              tags={moreTags}
+              activeFilter={activeFilter}
+              onFilter={onFilter}
+            />
+          )}
         </div>
       )}
 
