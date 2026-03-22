@@ -12,11 +12,11 @@ function label(lang) {
   return lang.charAt(0).toUpperCase() + lang.slice(1);
 }
 
-export default function LanguageDropdown({ posts, selected, onChange }) {
+export default function LanguageDropdown({ languages, selected, onChange }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
-  const languages = [...new Set(posts.map(p => p.language || 'english'))].sort();
+  const allSelected = selected.length >= languages.length;
 
   useEffect(() => {
     if (!open) return;
@@ -35,13 +35,13 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
   function toggle(lang, e) {
     e.stopPropagation();
     if (selected.includes(lang)) {
+      // Don't allow unchecking the last one
+      if (selected.length === 1) return;
       onChange(selected.filter(l => l !== lang));
     } else {
       onChange([...selected, lang]);
     }
   }
-
-  const anyActive = selected.length > 0;
 
   return (
     <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
@@ -54,13 +54,13 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
           textTransform: 'uppercase',
           padding: '5px 14px',
           borderRadius: '20px',
-          border: open || anyActive
+          border: open || !allSelected
             ? '1px solid rgba(196,160,80,0.7)'
             : '1px solid rgba(200,180,140,0.35)',
-          background: open || anyActive
+          background: open || !allSelected
             ? 'rgba(196,160,80,0.12)'
             : 'rgba(255,255,255,0.35)',
-          color: anyActive ? '#c4a050' : '#a0906a',
+          color: !allSelected ? '#c4a050' : '#a0906a',
           cursor: 'pointer',
           transition: 'border-color 0.15s, background 0.15s, color 0.15s',
           backdropFilter: 'blur(6px)',
@@ -68,7 +68,7 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
           textAlign: 'center',
         }}
       >
-        Language {open ? '▲' : '▼'}
+        Languages {open ? '▲' : '▼'}
       </button>
 
       {open && (
@@ -105,7 +105,6 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
                   userSelect: 'none',
                 }}
               >
-                {/* Custom checkbox */}
                 <span style={{
                   width: '16px',
                   height: '16px',

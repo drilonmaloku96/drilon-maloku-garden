@@ -8,9 +8,16 @@ import LanguageDropdown from './LanguageDropdown.jsx';
 import { PROJECTS } from '../lib/projects';
 
 export default function KnowledgeGarden({ posts }) {
+  const allLanguages = useMemo(
+    () => [...new Set(posts.map(p => p.language || 'english'))].sort(),
+    [posts]
+  );
+
   const [activeFilter, setActiveFilter] = useState('bubbles');
   const [sortOrder, setSortOrder] = useState('newest');
-  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [selectedLanguages, setSelectedLanguages] = useState(() =>
+    [...new Set(posts.map(p => p.language || 'english'))].sort()
+  );
   const [showBubbles, setShowBubbles] = useState(true);
   const [canvasOpacity, setCanvasOpacity] = useState(1);
   const [gridVisible, setGridVisible] = useState(false);
@@ -30,6 +37,8 @@ export default function KnowledgeGarden({ posts }) {
     }
   }, []);
 
+  const allLanguagesSelected = selectedLanguages.length >= allLanguages.length;
+
   const filteredPosts = useMemo(() => {
     let list;
     if (activeFilter === 'bubbles' || activeFilter === 'order') {
@@ -38,8 +47,8 @@ export default function KnowledgeGarden({ posts }) {
       list = posts.filter((p) => p.tags?.includes(activeFilter));
     }
 
-    // Apply language filter (empty = all)
-    if (selectedLanguages.length > 0) {
+    // Apply language filter only when not all languages are selected
+    if (!allLanguagesSelected) {
       list = list.filter((p) => selectedLanguages.includes(p.language ?? 'english'));
     }
 
@@ -49,7 +58,7 @@ export default function KnowledgeGarden({ posts }) {
       case 'random': return [...list].sort(() => Math.random() - 0.5);
       default:       return [...list].sort((a, b) => b.date.localeCompare(a.date));
     }
-  }, [posts, activeFilter, sortOrder]);
+  }, [posts, activeFilter, sortOrder, selectedLanguages, allLanguagesSelected]);
 
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -86,6 +95,15 @@ export default function KnowledgeGarden({ posts }) {
       goToGrid(filter);
     }
   }, [goToBubbles, goToGrid]);
+
+  const handleLanguageChange = useCallback((newSelected) => {
+    setSelectedLanguages(newSelected);
+    // Bubble view only works with all languages — switch to order if any unchecked
+    const allSelected = newSelected.length >= allLanguages.length;
+    if (!allSelected && showBubbles) {
+      goToGrid('order');
+    }
+  }, [allLanguages.length, showBubbles, goToGrid]);
 
   const isGrid = !showBubbles && gridVisible;
   const isProjects = isGrid && activeFilter === 'projects';
@@ -133,9 +151,9 @@ export default function KnowledgeGarden({ posts }) {
           Dentist. Builder. Writer. Explorer of ideas across borders and disciplines.
         </p>
         <LanguageDropdown
-          posts={posts}
+          languages={allLanguages}
           selected={selectedLanguages}
-          onChange={setSelectedLanguages}
+          onChange={handleLanguageChange}
         />
       </header>
 
