@@ -18,12 +18,12 @@ export default function GridView({ posts, onNavigate }) {
 
   return (
     <div style={{
-      maxWidth: '1000px',
+      maxWidth: '680px',
       margin: '0 auto',
       padding: '20px 24px 60px',
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-      gap: '16px',
+      gridTemplateColumns: '1fr',
+      gap: '14px',
     }}>
       {posts.map((post, i) => (
         <PostCard

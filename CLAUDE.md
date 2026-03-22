@@ -194,7 +194,7 @@ interface Post {
 ### Grid view
 
 - Transition: bubbles fade out over 500ms, grid fades in
-- CSS Grid: `repeat(auto-fill, minmax(280px, 1fr))`, 16px gap, max-width 1000px
+- CSS Grid: single column (`1fr`), 14px gap, max-width 680px centered
 - Sort controls: Newest / Oldest / A→Z / Random
 - ◎ Bubbles button returns to stream
 
@@ -256,8 +256,10 @@ Unknown tags get a deterministic auto-color from the tag name (no manual update 
 
 Double-click to publish. It:
 1. `rsync` copies `.md` files from Obsidian vault → `src/content/posts/` (excludes `Untitled*` and `_*`)
-2. `git add . && git commit && git push`
-3. GitHub Actions builds and deploys to Pages (~1 minute)
+2. `rsync` copies images from `Skrive/Pictures of the Articles/` → `public/images/`
+3. Python script rewrites `![[image.png]]` → `![image.png](/drilon-maloku-garden/images/image%20encoded.png)` in the copied posts
+4. `git add . && git commit && git push`
+5. GitHub Actions builds and deploys to Pages (~1 minute)
 
 ### GitHub Actions
 

@@ -15,8 +15,10 @@ export default function ProjectsView({ projects }) {
     }}>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: '16px',
+        gridTemplateColumns: '1fr',
+        gap: '14px',
+        maxWidth: '680px',
+        margin: '0 auto',
       }}>
         {projects.map((project, i) => {
           const status = STATUS_LABEL[project.status] ?? STATUS_LABEL['in-progress'];
