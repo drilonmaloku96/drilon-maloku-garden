@@ -1,0 +1,253 @@
+---
+import { getCollection, render } from 'astro:content';
+import { getAllPosts, getTagColor } from '../../lib/posts';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('posts');
+  return entries.map((entry) => ({ params: { slug: entry.id } }));
+}
+
+const { slug } = Astro.params;
+const allPosts = await getAllPosts();
+const post = allPosts.find((p) => p.slug === slug);
+
+if (!post) return Astro.redirect('/');
+
+const entries = await getCollection('posts');
+const entry = entries.find((e) => e.id === slug);
+if (!entry) return Astro.redirect('/');
+
+const { Content } = await render(entry);
+
+const TYPE_ICONS: Record<string, string> = {
+  project: '◆',
+  article: '◇',
+  creative: '○',
+  note: '▽',
+};
+const icon = TYPE_ICONS[post.type] ?? '◇';
+
+// Only wikilink-based connections — no tag suggestions
+const relatedPosts = post.wikilinkRelated
+  .map((s) => allPosts.find((p) => p.slug === s))
+  .filter((p): p is NonNullable<typeof p> => p !== undefined)
+  .slice(0, 6);
+
+const formattedDate = new Date(post.date).toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{post.title} — Drilon Maloku</title>
+    <meta name="description" content={post.excerpt} />
+    <meta property="og:title" content={post.title} />
+    <meta property="og:description" content={post.excerpt} />
+    <meta property="og:type" content="article" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <main style="max-width: 720px; margin: 0 auto; padding: 40px 24px 80px;">
+
+      <!-- Back link -->
+      <a
+        href="/"
+        style="
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-family: 'Courier New', monospace;
+          font-size: 12px;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          color: #a0906a;
+          margin-bottom: 40px;
+          opacity: 0.8;
+          text-decoration: none;
+        "
+      >
+        ← Back to stream
+      </a>
+
+      <!-- Type + date -->
+      <div style="
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #a0906a;
+        margin-bottom: 14px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      ">
+        <span>{icon} {post.type}</span>
+        <span style="opacity: 0.5;">·</span>
+        <span>{formattedDate}</span>
+      </div>
+
+      <!-- Title -->
+      <h1 style="
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: clamp(28px, 4vw, 42px);
+        font-weight: 400;
+        line-height: 1.2;
+        color: #2a2318;
+        margin-bottom: 20px;
+      ">
+        {post.title}
+      </h1>
+
+      <!-- Tags (clicking navigates back to homepage with that tag active) -->
+      {post.tags.length > 0 && (
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px;">
+          {post.tags.map((tag) => {
+            const { bg, text } = getTagColor(tag);
+            return (
+              <a
+                href={`/?filter=${encodeURIComponent(tag)}`}
+                class="tag-chip"
+                style={`background: ${bg}; color: ${text}; border-color: ${text};`}
+              >
+                {tag}
+              </a>
+            );
+          })}
+        </div>
+      )}
+
+      <hr style="border: none; border-top: 1px solid rgba(200,180,140,0.3); margin-bottom: 40px;" />
+
+      <!-- Article content -->
+      <div class="article-content">
+        <Content />
+      </div>
+
+      <!-- Related posts — wikilinks only -->
+      <div style="
+        margin-top: 64px;
+        padding-top: 32px;
+        border-top: 1px solid rgba(200,180,140,0.3);
+      ">
+        <p style="
+          font-family: 'Courier New', monospace;
+          font-size: 11px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: #c4a050;
+          margin-bottom: 16px;
+        ">
+          Connected writings
+        </p>
+
+        {relatedPosts.length > 0 ? (
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            {relatedPosts.map((rel) => {
+              const relIcon = TYPE_ICONS[rel.type] ?? '◇';
+              const { bg, text: _ } = { bg: 'rgba(255,255,255,0.4)', text: '' };
+              return (
+                <a
+                  href={`/post/${rel.slug}`}
+                  class="related-link"
+                  style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 12px;
+                    padding: 14px 16px;
+                    background: rgba(255,255,255,0.4);
+                    border: 1px solid rgba(200,180,140,0.25);
+                    border-radius: 10px;
+                    text-decoration: none;
+                  "
+                >
+                  <span style="
+                    font-family: 'Courier New', monospace;
+                    font-size: 11px;
+                    color: #c4a050;
+                    flex-shrink: 0;
+                    margin-top: 3px;
+                  ">
+                    {relIcon}
+                  </span>
+                  <div>
+                    <div style="
+                      font-family: Georgia, serif;
+                      font-size: 15px;
+                      color: #2a2318;
+                      line-height: 1.4;
+                      margin-bottom: 3px;
+                    ">
+                      {rel.title}
+                    </div>
+                    {rel.excerpt && (
+                      <div style="
+                        font-family: Georgia, serif;
+                        font-size: 12px;
+                        color: #a0906a;
+                        line-height: 1.45;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                      ">
+                        {rel.excerpt}
+                      </div>
+                    )}
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        ) : (
+          <p style="
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #a0906a;
+            opacity: 0.6;
+            font-style: italic;
+          ">
+            No connections yet — add [[wikilinks]] in Obsidian to link this piece to others.
+          </p>
+        )}
+      </div>
+
+      <!-- Footer -->
+      <footer style="
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(200,180,140,0.15);
+        text-align: center;
+      ">
+        <a
+          href="/"
+          style="
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #a0906a;
+            opacity: 0.6;
+            text-decoration: none;
+          "
+        >
+          ← Drilon Maloku
+        </a>
+      </footer>
+    </main>
+
+    <style>
+      a[href="/"]:hover { opacity: 1 !important; }
+      .related-link:hover {
+        border-color: rgba(200,160,80,0.5) !important;
+        background: rgba(255,255,255,0.62) !important;
+      }
+    </style>
+  </body>
+</html>
