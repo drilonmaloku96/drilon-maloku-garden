@@ -83,7 +83,7 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
       hue,
       sat,
       vx: randomBetween(-1.2, 1.2),
-      vy: -randomBetween(6.0, 9.0),           // initial burst — position-based speed takes over
+      vy: -randomBetween(3.0, 5.0),            // initial burst — position-based speed takes over
       wobbleOffset: Math.random() * Math.PI * 2,
       wobbleSpeed: randomBetween(0.018, 0.035), // fast erratic wobble
       wobbleAmplitude: randomBetween(0.012, 0.028), // per-bubble amplitude
@@ -152,7 +152,7 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
         if (Math.random() < 0.008) b.vx += randomBetween(-0.6, 0.6);
         b.vx *= 0.992;
         // Velocity scales with distance from top: fast near bottom, slow near top
-        const targetVy = -(0.5 + Math.max(0, b.y / logicalH) * 7.5);
+        const targetVy = -(0.35 + Math.max(0, b.y / logicalH) * 3.0);
         b.vy += (targetVy - b.vy) * 0.05;
         b.x += b.vx;
         b.y += b.vy;
@@ -172,9 +172,8 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
           b.opacity = Math.min(1, b.opacity + 0.055);
         }
 
-        // Trigger pop when top edge hits the top bar area
-        const popZone = 90;
-        if (!b.popping && b.y - b.radius < popZone) {
+        // Trigger pop when top edge reaches the FilterBar (canvas top = y 0)
+        if (!b.popping && b.y - b.radius < 0) {
           b.popping = true;
           b.popT = 0;
           // Generate droplets at random angles with varying sizes and speeds
@@ -186,7 +185,7 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
         }
 
         if (b.popping) {
-          b.popT += 0.065;
+          b.popT += 0.04;
           if (b.popT < 1) alive.push(b);
           continue;
         }
@@ -249,61 +248,80 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
           const r  = b.radius;
           const ease = 1 - Math.pow(1 - t, 2); // ease-out
 
-          // Expanding ghost bubble
+          // Expanding ghost bubble shell
           ctx.save();
-          ctx.globalAlpha = Math.max(0, (1 - t * 1.8) * b.opacity);
+          ctx.globalAlpha = Math.max(0, (1 - t * 1.4) * b.opacity);
           ctx.translate(bx, by);
-          const expandR = r * (1 + ease * 0.35);
-          const gGrad = ctx.createRadialGradient(0, 0, expandR * 0.4, 0, 0, expandR);
-          gGrad.addColorStop(0, `hsla(${b.hue}, ${b.sat}%, 97%, 0)`);
-          gGrad.addColorStop(1, `hsla(${b.hue}, ${b.sat + 10}%, 80%, 0.5)`);
+          const expandR = r * (1 + ease * 0.55);
           ctx.beginPath();
           ctx.arc(0, 0, expandR, 0, Math.PI * 2);
-          ctx.fillStyle = gGrad;
-          ctx.fill();
-          ctx.strokeStyle = `hsla(${b.hue}, ${b.sat + 25}%, 60%, ${0.7 * (1 - t)})`;
-          ctx.lineWidth = 1.5 * (1 - t);
+          ctx.strokeStyle = `hsla(${b.hue}, ${b.sat + 30}%, 58%, ${0.9 * (1 - t)})`;
+          ctx.lineWidth = 2.5 * (1 - t * 0.7);
           ctx.stroke();
           ctx.restore();
 
-          // Expanding ring
+          // Inner flash fill
           ctx.save();
-          ctx.globalAlpha = Math.max(0, (1 - t) * 0.65 * b.opacity);
+          ctx.globalAlpha = Math.max(0, (1 - t * 3) * 0.45 * b.opacity);
+          ctx.translate(bx, by);
+          const flashGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+          flashGrad.addColorStop(0, `hsla(${b.hue}, ${b.sat + 20}%, 95%, 1)`);
+          flashGrad.addColorStop(1, `hsla(${b.hue}, ${b.sat + 10}%, 80%, 0)`);
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI * 2);
+          ctx.fillStyle = flashGrad;
+          ctx.fill();
+          ctx.restore();
+
+          // Expanding ring (wide, fast)
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, (1 - t) * 0.8 * b.opacity);
           ctx.translate(bx, by);
           ctx.beginPath();
-          ctx.arc(0, 0, r * (1 + ease * 2.2), 0, Math.PI * 2);
-          ctx.strokeStyle = `hsla(${b.hue}, ${b.sat + 20}%, 70%, 1)`;
-          ctx.lineWidth = Math.max(0.3, 2 * (1 - t));
+          ctx.arc(0, 0, r * (1 + ease * 3.0), 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${b.hue}, ${b.sat + 25}%, 65%, 1)`;
+          ctx.lineWidth = Math.max(0.2, 2.5 * (1 - t));
+          ctx.stroke();
+          ctx.restore();
+
+          // Second thinner ring slightly slower
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, (1 - t * 1.3) * 0.5 * b.opacity);
+          ctx.translate(bx, by);
+          ctx.beginPath();
+          ctx.arc(0, 0, r * (1 + ease * 1.6), 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${b.hue}, ${b.sat + 15}%, 75%, 1)`;
+          ctx.lineWidth = Math.max(0.2, 1.5 * (1 - t));
           ctx.stroke();
           ctx.restore();
 
           // Droplets scattering outward
           for (const d of b.popDroplets) {
-            const dist   = r * (0.2 + ease * d.speed * 1.6);
+            const dist   = r * (0.1 + ease * d.speed * 2.2);
             const dx     = Math.cos(d.angle) * dist;
             const dy     = Math.sin(d.angle) * dist;
-            const dropR  = r * d.size * (1 - t * 0.4);
-            const alpha  = Math.max(0, (1 - t * 1.2) * 0.85 * b.opacity);
+            const dropR  = r * d.size * Math.max(0.2, 1 - t * 0.6);
+            const alpha  = Math.max(0, (1 - t) * 0.9 * b.opacity);
             ctx.save();
             ctx.globalAlpha = alpha;
             ctx.beginPath();
             ctx.arc(bx + dx, by + dy, dropR, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${b.hue}, ${b.sat + 15}%, 78%, 1)`;
+            ctx.fillStyle = `hsla(${b.hue}, ${b.sat + 20}%, 72%, 1)`;
             ctx.fill();
             ctx.restore();
           }
 
-          // Tiny sparkle dots at peak of pop
-          if (t < 0.45) {
-            const sparkAlpha = Math.max(0, (0.45 - t) / 0.45 * 0.7 * b.opacity);
-            for (let i = 0; i < 5; i++) {
-              const a = (i / 5) * Math.PI * 2 + t * 3;
-              const sd = r * (0.55 + ease * 0.35);
+          // Sparkle dots orbiting outward
+          if (t < 0.55) {
+            const sparkAlpha = Math.max(0, (0.55 - t) / 0.55 * 0.9 * b.opacity);
+            for (let i = 0; i < 6; i++) {
+              const a = (i / 6) * Math.PI * 2 + t * 4;
+              const sd = r * (0.7 + ease * 0.6);
               ctx.save();
               ctx.globalAlpha = sparkAlpha;
               ctx.beginPath();
-              ctx.arc(bx + Math.cos(a) * sd, by + Math.sin(a) * sd, r * 0.04, 0, Math.PI * 2);
-              ctx.fillStyle = `hsla(${b.hue}, 60%, 92%, 1)`;
+              ctx.arc(bx + Math.cos(a) * sd, by + Math.sin(a) * sd, r * 0.05, 0, Math.PI * 2);
+              ctx.fillStyle = `hsla(${b.hue}, 70%, 90%, 1)`;
               ctx.fill();
               ctx.restore();
             }
