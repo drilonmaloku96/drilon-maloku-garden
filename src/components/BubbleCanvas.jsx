@@ -172,14 +172,24 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
           b.opacity = Math.min(1, b.opacity + 0.055);
         }
 
-        // Fade out near top
-        const fadeZone = 80;
-        if (b.y - b.radius < fadeZone) {
-          b.opacity = Math.max(0, b.opacity - 0.03);
+        // Trigger pop when top edge hits the top bar area
+        const popZone = 90;
+        if (!b.popping && b.y - b.radius < popZone) {
+          b.popping = true;
+          b.popT = 0;
+          // Generate droplets at random angles with varying sizes and speeds
+          b.popDroplets = Array.from({ length: 8 }, (_, i) => ({
+            angle: (i / 8) * Math.PI * 2 + randomBetween(-0.3, 0.3),
+            speed: randomBetween(0.7, 1.4),
+            size:  randomBetween(0.07, 0.13),
+          }));
         }
 
-        if (b.opacity <= 0 && b.y < logicalH * 0.3) continue;
-        if (b.y < -b.radius * 2) continue;
+        if (b.popping) {
+          b.popT += 0.065;
+          if (b.popT < 1) alive.push(b);
+          continue;
+        }
 
         alive.push(b);
       }
@@ -230,11 +240,80 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
 
       // Draw bubbles
       for (const b of alive) {
-        const scale = b.hovered ? 1.06 : 1;
-        const r = b.radius * scale;
-        // Snap to half-pixel to keep circle edge crisp
         const bx = Math.round(b.x * 2) / 2;
         const by = Math.round(b.y * 2) / 2;
+
+        // ── Pop animation ──
+        if (b.popping) {
+          const t  = b.popT;
+          const r  = b.radius;
+          const ease = 1 - Math.pow(1 - t, 2); // ease-out
+
+          // Expanding ghost bubble
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, (1 - t * 1.8) * b.opacity);
+          ctx.translate(bx, by);
+          const expandR = r * (1 + ease * 0.35);
+          const gGrad = ctx.createRadialGradient(0, 0, expandR * 0.4, 0, 0, expandR);
+          gGrad.addColorStop(0, `hsla(${b.hue}, ${b.sat}%, 97%, 0)`);
+          gGrad.addColorStop(1, `hsla(${b.hue}, ${b.sat + 10}%, 80%, 0.5)`);
+          ctx.beginPath();
+          ctx.arc(0, 0, expandR, 0, Math.PI * 2);
+          ctx.fillStyle = gGrad;
+          ctx.fill();
+          ctx.strokeStyle = `hsla(${b.hue}, ${b.sat + 25}%, 60%, ${0.7 * (1 - t)})`;
+          ctx.lineWidth = 1.5 * (1 - t);
+          ctx.stroke();
+          ctx.restore();
+
+          // Expanding ring
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, (1 - t) * 0.65 * b.opacity);
+          ctx.translate(bx, by);
+          ctx.beginPath();
+          ctx.arc(0, 0, r * (1 + ease * 2.2), 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${b.hue}, ${b.sat + 20}%, 70%, 1)`;
+          ctx.lineWidth = Math.max(0.3, 2 * (1 - t));
+          ctx.stroke();
+          ctx.restore();
+
+          // Droplets scattering outward
+          for (const d of b.popDroplets) {
+            const dist   = r * (0.2 + ease * d.speed * 1.6);
+            const dx     = Math.cos(d.angle) * dist;
+            const dy     = Math.sin(d.angle) * dist;
+            const dropR  = r * d.size * (1 - t * 0.4);
+            const alpha  = Math.max(0, (1 - t * 1.2) * 0.85 * b.opacity);
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.beginPath();
+            ctx.arc(bx + dx, by + dy, dropR, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${b.hue}, ${b.sat + 15}%, 78%, 1)`;
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // Tiny sparkle dots at peak of pop
+          if (t < 0.45) {
+            const sparkAlpha = Math.max(0, (0.45 - t) / 0.45 * 0.7 * b.opacity);
+            for (let i = 0; i < 5; i++) {
+              const a = (i / 5) * Math.PI * 2 + t * 3;
+              const sd = r * (0.55 + ease * 0.35);
+              ctx.save();
+              ctx.globalAlpha = sparkAlpha;
+              ctx.beginPath();
+              ctx.arc(bx + Math.cos(a) * sd, by + Math.sin(a) * sd, r * 0.04, 0, Math.PI * 2);
+              ctx.fillStyle = `hsla(${b.hue}, 60%, 92%, 1)`;
+              ctx.fill();
+              ctx.restore();
+            }
+          }
+
+          continue; // skip normal draw
+        }
+
+        const scale = b.hovered ? 1.06 : 1;
+        const r = b.radius * scale;
 
         // ── Background fill + border (no clip, drawn first) ──
         ctx.save();
