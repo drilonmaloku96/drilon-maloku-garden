@@ -21,7 +21,8 @@ export default function PostCard({ post, index, onNavigate }) {
         backdropFilter: 'blur(8px)',
         border: `1px solid ${hovered ? 'rgba(200,160,80,0.5)' : 'rgba(200,180,140,0.3)'}`,
         borderRadius: '12px',
-        padding: '28px 24px',
+        padding: '36px 28px',
+        minHeight: '180px',
         cursor: 'pointer',
         transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
         boxShadow: hovered ? '0 8px 24px rgba(100,80,40,0.1)' : '0 2px 8px rgba(100,80,40,0.04)',
@@ -30,7 +31,7 @@ export default function PostCard({ post, index, onNavigate }) {
         animationDelay: `${index * 40}ms`,
         display: 'flex',
         flexDirection: 'column',
-        gap: '14px',
+        gap: '18px',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -56,9 +57,9 @@ export default function PostCard({ post, index, onNavigate }) {
 
       <h2 style={{
         fontFamily: 'Georgia, serif',
-        fontSize: '16px',
+        fontSize: '19px',
         fontWeight: 400,
-        lineHeight: 1.45,
+        lineHeight: 1.5,
         color: '#2a2318',
         margin: 0,
       }}>
@@ -68,8 +69,8 @@ export default function PostCard({ post, index, onNavigate }) {
       {post.excerpt && (
         <p style={{
           fontFamily: 'Georgia, serif',
-          fontSize: '13px',
-          lineHeight: 1.55,
+          fontSize: '14px',
+          lineHeight: 1.7,
           color: '#6a5d45',
           margin: 0,
           opacity: 0.85,

@@ -1,0 +1,25 @@
+
+It is rather interesting. How you can waste six years, strike that, nearly 7 years for a university diploma to be crowned a dentist and yet not have any of the needed skills to be a good one. I was very good at reciting definitions of diseases, their symptoms and their treatment options from memory, while not having done any of the treatments from A to Z myself. It was a very refined university in shrewdly avoiding actually teaching you anything – They make sure that every phase of the treatment is not seen through by one single Student. Each student got cases haphazardly assigned to them and many of them missed crucial phases of the whole process of treating one dental situation.
+
+When we were taught, the focus, it seemed, was never on the important things. We were focusing on semantics: true periodontal pockets versus fake ones; concrements versus supragingival stones; History of generations of amalgam fillings; history of generations of plastic fillings; history of theories of the development of caries; the kinds of inflammation of the tooth nerve and how to distinguish them (you don’t need to because they got the same treatment method); extremely rare complications of treatments; even rarer genetic conditions of the jaws and teeth; the different methods of cleaning your teeth and their names according to the authors that first described them and their shortcomings in comparison to the best available technique that is internationally recognised now. 
+
+Up to the third year of university, we never really held a hand piece which is the most important device for dentists. We were given descriptions of it and we had to recount all of its technical specifications, but we were to not be too hasty and we had to keep being patient until we are worthy of beholding them. 
+
+For the people who are not dentists: this amounts to the parallel of an apprentice baker never being allowed to even see flour, without first having learned the theoretical wisdom of what species of wheat is used in manufacturing it. The way the wheat is planted, when it is planted, when it is sown, how you grind it up, what is used to do that and the different generations of technical advancement the grinding machine went through to come to the most modern device that is in use today. To spare your time and my sanity I will stop the analogy here, but in reality I would have to go into even more specifics such as kinds of flour, the correlation of volume and mass they occupy… and much more maddeningly crazy stuff.
+
+When we were practicing our therapies on patients, from the 4th year of studies and onwards, we had to execute the steps in the order and manner as the attending assistant professor on that particular day desired it. This is exactly as it sounds like. The truth and science of dental medicine was malleable and bendable to the wills of individual assistant professors who never seemed to agree with one-another. None of them seemed ever to come to the idea to consult the literature and resolve their differences in opinion on how therapies are to be conducted… and align in one unifying method that is scientifically correct and backed up by actual evidence. It is hilariously ridiculous in the hands of what kinds of people the regular citizen entrusts their health.
+
+I had gone through almost 7 years of university and had never seen more than 20 panoramic x-rays. 7 years of and even fewer  of situational models of patients oral situation. 
+Do you know how many we got to evaluate under instruction and create mock-up diagnoses through the whole of the university education? zero. 
+The only time where we got to utter our suspected diagnoses to an assistant professor was when we were doing the pre-exam examination. Most passed it with the bare minimum of knowledge.
+
+In contrast, seeing my genuine lack of skills, my prospective chef had the goodwill to test my motivation and instruct me at once. The first week of hospitation in a dental clinic in Germany was met with a stack of x-rays- over 60 of them, awaiting evaluation, description and suspected diagnoses. In one week I had learned something almost 7 years of university couldn’t. It felt good, to finally have one skill that I knew I excelled at. I did the evaluations and reports for all the following x-rays with zeal and in turn I honed that skill of mine to a level of never-erring and at a speed I never believed possible.
+
+After that one… He piled another job that was expected of me. And then another one…
+And another one… 
+Layer by layer, ability by ability, I was instructed, I was overseen, I was criticized.
+After undergoing such rigorous training for 6 months, I finally had acquired the knowledge and abilities my diploma was supposed to certify.
+
+In the end I was left with one question in my mind:
+
+What the hell did I go to university for?

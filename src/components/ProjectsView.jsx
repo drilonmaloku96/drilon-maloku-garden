@@ -33,8 +33,9 @@ export default function ProjectsView({ projects }) {
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '14px',
-                padding: '28px 24px',
+                gap: '18px',
+                padding: '36px 28px',
+                minHeight: '180px',
                 borderRadius: '16px',
                 border: '1px solid rgba(130, 50, 60, 0.18)',
                 background: 'rgba(255,255,255,0.42)',
@@ -61,10 +62,10 @@ export default function ProjectsView({ projects }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                 <h3 style={{
                   fontFamily: 'Georgia, serif',
-                  fontSize: '16px',
+                  fontSize: '19px',
                   fontWeight: 700,
                   color: '#2a2318',
-                  lineHeight: 1.3,
+                  lineHeight: 1.4,
                 }}>
                   {project.title}
                 </h3>
@@ -84,8 +85,8 @@ export default function ProjectsView({ projects }) {
               {/* Description */}
               <p style={{
                 fontFamily: 'Georgia, serif',
-                fontSize: '13px',
-                lineHeight: 1.65,
+                fontSize: '14px',
+                lineHeight: 1.75,
                 color: '#6a5d45',
                 flex: 1,
               }}>
