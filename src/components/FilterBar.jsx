@@ -165,10 +165,10 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
       {/* Special golden buttons */}
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
         <button onClick={() => onFilter('bubbles')} style={specialBtn('bubbles')}>
-          ◎ Everything in Bubbles
+          ◎ Thoughts in Bubbles
         </button>
         <button onClick={() => onFilter('order')} style={specialBtn('order')}>
-          ≡ Everything in Order
+          ≡ Thoughts in Order
         </button>
       </div>
 

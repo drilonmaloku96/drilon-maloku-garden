@@ -16,18 +16,23 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
-  // Derive languages present in posts
   const languages = [...new Set(posts.map(p => p.language || 'english'))].sort();
+  const allSelected = selected.length === 0;
 
-  // Close on outside click
+  // Close on outside click — use 'click' not 'mousedown' to avoid race with button
   useEffect(() => {
     if (!open) return;
-    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
   }, [open]);
 
-  const allSelected = selected.length === 0;
+  function toggleOpen(e) {
+    e.stopPropagation(); // prevent document click handler from immediately closing
+    setOpen(o => !o);
+  }
 
   function toggle(lang) {
     if (selected.includes(lang)) {
@@ -39,7 +44,6 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
     }
   }
 
-  // Button label
   const btnLabel = allSelected
     ? 'All languages'
     : selected.length === 1
@@ -49,25 +53,26 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
   return (
     <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={toggleOpen}
         style={{
           fontFamily: "'Courier New', monospace",
           fontSize: '11px',
           letterSpacing: '1.5px',
           textTransform: 'uppercase',
-          padding: '5px 12px',
+          padding: '5px 14px',
           borderRadius: '20px',
-          border: open
+          border: open || !allSelected
             ? '1px solid rgba(196,160,80,0.7)'
             : '1px solid rgba(200,180,140,0.35)',
-          background: open
+          background: open || !allSelected
             ? 'rgba(196,160,80,0.12)'
             : 'rgba(255,255,255,0.35)',
           color: allSelected ? '#a0906a' : '#c4a050',
           cursor: 'pointer',
-          transition: 'all 0.15s ease',
+          transition: 'border-color 0.15s, background 0.15s, color 0.15s',
           backdropFilter: 'blur(6px)',
-          whiteSpace: 'nowrap',
+          minWidth: '140px',   // fixed width prevents jitter when label changes
+          textAlign: 'center',
         }}
       >
         {btnLabel} {open ? '▲' : '▼'}
@@ -78,20 +83,20 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
           position: 'absolute',
           top: 'calc(100% + 8px)',
           left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'rgba(250,244,228,0.96)',
-          backdropFilter: 'blur(12px)',
+          transformOrigin: 'top center',
+          background: 'rgba(250,244,228,0.97)',
+          backdropFilter: 'blur(14px)',
           border: '1px solid rgba(200,180,140,0.4)',
           borderRadius: '16px',
           boxShadow: '0 8px 32px rgba(80,60,20,0.18)',
           padding: '10px 8px',
-          minWidth: '160px',
+          minWidth: '170px',
           zIndex: 100,
-          animation: 'fadeIn 0.15s ease',
+          animation: 'dropdownOpen 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         }}>
-          {/* All languages option */}
+          {/* All languages */}
           <button
-            onClick={() => { onChange([]); setOpen(false); }}
+            onClick={(e) => { e.stopPropagation(); onChange([]); setOpen(false); }}
             style={{
               display: 'block',
               width: '100%',
@@ -109,7 +114,7 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
               marginBottom: '4px',
             }}
           >
-            {allSelected ? '✓ ' : '  '}All languages
+            {allSelected ? '✓ ' : '\u00a0\u00a0'}All languages
           </button>
 
           <div style={{ height: '1px', background: 'rgba(200,180,140,0.3)', margin: '4px 8px' }} />
@@ -119,7 +124,7 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
             return (
               <button
                 key={lang}
-                onClick={() => toggle(lang)}
+                onClick={(e) => { e.stopPropagation(); toggle(lang); }}
                 style={{
                   display: 'block',
                   width: '100%',
@@ -134,9 +139,10 @@ export default function LanguageDropdown({ posts, selected, onChange }) {
                   letterSpacing: '1px',
                   textTransform: 'uppercase',
                   cursor: 'pointer',
+                  transition: 'background 0.12s, color 0.12s',
                 }}
               >
-                {active ? '✓ ' : '  '}{FLAG[lang] ?? '🌐'} {label(lang)}
+                {active ? '✓ ' : '\u00a0\u00a0'}{FLAG[lang] ?? '🌐'} {label(lang)}
               </button>
             );
           })}

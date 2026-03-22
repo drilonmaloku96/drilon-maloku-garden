@@ -72,8 +72,8 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
     // Deterministic offset from which specific tags are present (±12°)
     const hue = HUE_STOPS[idx] + tagsHueOffset(post.tags ?? []);
     const sat = SAT_STOPS[idx];
-    // Spawn 600–1000px below the visible bottom edge
-    const spawnY = canvas.height + radius + randomBetween(600, 1000);
+    // Spawn just below the visible bottom edge
+    const spawnY = canvas.height + radius + randomBetween(10, 60);
 
     bubblesRef.current.push({
       post,
@@ -151,8 +151,10 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
         // Occasional random kick for extra erraticness
         if (Math.random() < 0.008) b.vx += randomBetween(-0.6, 0.6);
         b.vx *= 0.992;
-        // Decelerate upward — converge toward a slow drift of -0.4 px/frame
-        b.vy = b.vy * 0.978 + (-0.4) * 0.022;
+        // Decelerate only within 1000px of the top — full speed below that
+        if (b.y < 1000) {
+          b.vy = b.vy * 0.978 + (-0.4) * 0.022;
+        }
         b.x += b.vx;
         b.y += b.vy;
 
