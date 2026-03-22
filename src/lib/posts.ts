@@ -12,6 +12,7 @@ export interface Post {
   wikilinkRelated: string[];  // same as related — kept as explicit alias for article page clarity
   wikilinks: string[];        // raw [[...]] targets found in body
   language: string;
+  thumbnail?: string;         // first image URL found in body, if any
 }
 
 
@@ -40,6 +41,11 @@ export function stripWikilinks(body: string): string {
     const parts = inner.split('|');
     return parts.length > 1 ? parts[1].trim() : parts[0].trim();
   });
+}
+
+function extractFirstImage(body: string): string | undefined {
+  const match = body.match(/!\[[^\]]*\]\(([^)]+)\)/);
+  return match ? match[1] : undefined;
 }
 
 function makeExcerpt(body: string): string {
@@ -96,6 +102,7 @@ export async function getAllPosts(): Promise<Post[]> {
         ? new Date(entry.data.date as string | Date).toISOString().split('T')[0]
         : new Date().toISOString().split('T')[0],
       excerpt: makeExcerpt(body),
+      thumbnail: extractFirstImage(body),
       type: (entry.data.type as Post['type']) ?? 'article',
       tags: (entry.data.tags as string[]) ?? [],
       language: (entry.data.language as string) ?? 'english',
