@@ -83,7 +83,7 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
       hue,
       sat,
       vx: randomBetween(-1.2, 1.2),
-      vy: -randomBetween(3.0, 5.0),            // initial burst — position-based speed takes over
+      vy: -randomBetween(2.0, 3.5),            // initial burst — position-based speed takes over
       wobbleOffset: Math.random() * Math.PI * 2,
       wobbleSpeed: randomBetween(0.018, 0.035), // fast erratic wobble
       wobbleAmplitude: randomBetween(0.012, 0.028), // per-bubble amplitude
@@ -152,7 +152,8 @@ export default function BubbleCanvas({ posts, onNavigate, visible }) {
         if (Math.random() < 0.008) b.vx += randomBetween(-0.6, 0.6);
         b.vx *= 0.992;
         // Velocity scales with distance from top: fast near bottom, slow near top
-        const targetVy = -(0.35 + Math.max(0, b.y / logicalH) * 3.0);
+        // Power curve (^1.8) makes the upper half decelerate much more aggressively
+        const targetVy = -(0.2 + Math.pow(Math.max(0, b.y / logicalH), 1.8) * 3.5);
         b.vy += (targetVy - b.vy) * 0.05;
         b.x += b.vx;
         b.y += b.vy;

@@ -54,26 +54,39 @@ const formattedDate = new Date(post.date).toLocaleDateString('en-GB', {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
-    <main style="max-width: 720px; margin: 0 auto; padding: 40px 24px 80px;">
+    <!-- Site header -->
+    <div style="text-align: center; padding: 28px 24px 16px;">
+      <a href={import.meta.env.BASE_URL} style="text-decoration: none; display: inline-block;">
+        <p style="font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #a0906a; margin: 0 0 4px;">Welcome to the thoughts of</p>
+        <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: clamp(20px, 3.5vw, 30px); font-weight: 400; font-style: italic; color: #2a2318; margin: 0; line-height: 1.1;">Drilon Maloku</h2>
+      </a>
+    </div>
+
+    <main style="max-width: 720px; margin: 0 auto; padding: 8px 24px 80px;">
 
       <!-- Back link -->
       <a
-        href="/"
+        href={import.meta.env.BASE_URL}
+        class="back-btn"
         style="
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           font-family: 'Courier New', monospace;
-          font-size: 12px;
-          letter-spacing: 1px;
+          font-size: 13px;
+          letter-spacing: 1.5px;
           text-transform: uppercase;
-          color: #a0906a;
+          color: #6a5d45;
           margin-bottom: 40px;
-          opacity: 0.8;
           text-decoration: none;
+          padding: 10px 22px;
+          border-radius: 20px;
+          border: 1px solid rgba(200,180,140,0.5);
+          background: rgba(255,255,255,0.55);
+          backdrop-filter: blur(6px);
         "
       >
-        ← Back to stream
+        ← Back
       </a>
 
       <!-- Type + date -->
@@ -226,7 +239,7 @@ const formattedDate = new Date(post.date).toLocaleDateString('en-GB', {
         text-align: center;
       ">
         <a
-          href="/"
+          href={import.meta.env.BASE_URL}
           style="
             font-family: 'Courier New', monospace;
             font-size: 11px;
@@ -243,7 +256,11 @@ const formattedDate = new Date(post.date).toLocaleDateString('en-GB', {
     </main>
 
     <style>
-      a[href="/"]:hover { opacity: 1 !important; }
+      .back-btn:hover {
+        background: rgba(255,255,255,0.82) !important;
+        border-color: rgba(200,160,80,0.6) !important;
+        color: #4a3f2e !important;
+      }
       .related-link:hover {
         border-color: rgba(200,160,80,0.5) !important;
         background: rgba(255,255,255,0.62) !important;

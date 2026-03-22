@@ -261,25 +261,6 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
               {s === 'a-z' ? 'A→Z' : s}
             </button>
           ))}
-          <button
-            onClick={onBack}
-            style={{
-              fontFamily: "'Courier New', monospace",
-              fontSize: '10px',
-              letterSpacing: '0.5px',
-              textTransform: 'uppercase',
-              padding: '3px 10px',
-              borderRadius: '12px',
-              border: '1px solid rgba(196,160,80,0.3)',
-              color: '#c4a050',
-              cursor: 'pointer',
-              marginLeft: '6px',
-              background: 'transparent',
-              transition: 'all 0.15s',
-            }}
-          >
-            ◎ Bubbles
-          </button>
         </div>
       )}
     </div>

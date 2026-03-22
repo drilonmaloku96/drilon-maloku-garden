@@ -127,7 +127,7 @@ export default function KnowledgeGarden({ posts }) {
           color: '#a0906a',
           marginBottom: '6px',
         }}>
-          Welcome to the world of
+          Welcome to the thoughts of
         </p>
         <h1 style={{
           fontFamily: "'Playfair Display', Georgia, serif",
@@ -148,7 +148,7 @@ export default function KnowledgeGarden({ posts }) {
           maxWidth: '440px',
           margin: '0 auto 12px',
         }}>
-          Dentist. Builder. Writer. Explorer of ideas across borders and disciplines.
+          Dentist. Thinker. Writer. Explorer of ideas across borders and disciplines.
         </p>
         <LanguageDropdown
           languages={allLanguages}

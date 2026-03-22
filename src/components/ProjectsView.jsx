@@ -43,13 +43,14 @@ export default function ProjectsView({ projects }) {
                 textDecoration: 'none',
                 color: 'inherit',
                 cursor: isLive ? 'pointer' : 'default',
+                boxShadow: '0 4px 16px rgba(130,50,60,0.08)',
                 transition: 'transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease',
                 animation: `fadeSlideUp 0.35s ease both`,
                 animationDelay: `${i * 50}ms`,
               }}
               onMouseEnter={isLive ? (e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
-                e.currentTarget.style.boxShadow = '0 8px 28px rgba(130,50,60,0.12)';
+                e.currentTarget.style.boxShadow = '0 12px 32px rgba(130,50,60,0.20)';
                 e.currentTarget.style.borderColor = 'rgba(130,50,60,0.35)';
               } : undefined}
               onMouseLeave={isLive ? (e) => {
