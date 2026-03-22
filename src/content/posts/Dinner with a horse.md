@@ -7,7 +7,7 @@ language: english
 related: []
 ---
 
-![Dream about horses AI generated picture.png](/drilon-maloku-garden/images/Dream about horses AI generated picture.png)
+![Dream about horses AI generated picture.png](/drilon-maloku-garden/images/Dream%20about%20horses%20AI%20generated%20picture.png)
 
 I woke in the middle of the night, around two in the morning, still half-caught inside the dream I was having. In it, I found myself walking into a strange restaurant—one unlike anything I had ever seen. The walls had large openings built directly into them, almost like stable windows. Through these openings, the horses belonging to the guests could poke their heads into the dining room.
 Each opening connected to a feeding trough on the outside, and on the inside the trough blended seamlessly into a dining table. Families sat together with their horses as if it were the most normal thing in the world—people and animals sharing a meal side by side.
