@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { getTagColor } from '../lib/colors';
 
 const TOP_TAGS = 3;
@@ -15,98 +15,9 @@ function deriveTagCounts(posts) {
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
 }
 
-function TagMoreDropdown({ tags, activeFilter, onFilter }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
-
-  const anyActive = tags.some(({ tag }) => tag === activeFilter);
-
-  return (
-    <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        style={{
-          fontFamily: "'Courier New', monospace",
-          fontSize: '11px',
-          letterSpacing: '0.5px',
-          padding: '4px 11px',
-          borderRadius: '20px',
-          border: anyActive
-            ? '1px solid rgba(196,160,80,0.8)'
-            : '1px solid rgba(200,180,140,0.4)',
-          background: anyActive
-            ? 'rgba(196,160,80,0.15)'
-            : 'rgba(255,255,255,0.3)',
-          color: anyActive ? '#c4a050' : '#a0906a',
-          cursor: 'pointer',
-          transition: 'all 0.15s ease',
-          backdropFilter: 'blur(6px)',
-        }}
-      >
-        {open ? '✕' : `+${tags.length}`}
-      </button>
-
-      {open && (
-        <div style={{
-          position: 'absolute',
-          top: 'calc(100% + 8px)',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'rgba(250,244,228,0.97)',
-          backdropFilter: 'blur(14px)',
-          border: '1px solid rgba(200,180,140,0.4)',
-          borderRadius: '16px',
-          boxShadow: '0 8px 32px rgba(80,60,20,0.18)',
-          padding: '10px 8px',
-          minWidth: '180px',
-          zIndex: 100,
-          animation: 'fadeIn 0.15s ease',
-        }}>
-          {tags.map(({ tag, count }) => {
-            const isActive = activeFilter === tag;
-            const { bg, text } = getTagColor(tag);
-            return (
-              <button
-                key={tag}
-                onClick={() => { onFilter(tag); setOpen(false); }}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-                  textAlign: 'left',
-                  padding: '7px 12px',
-                  borderRadius: '10px',
-                  border: 'none',
-                  background: isActive ? bg.replace(/[\d.]+\)$/, '0.22)') : 'transparent',
-                  color: isActive ? text : '#6a5d45',
-                  fontFamily: "'Courier New', monospace",
-                  fontSize: '11px',
-                  letterSpacing: '0.5px',
-                  textTransform: 'lowercase',
-                  cursor: 'pointer',
-                  gap: '8px',
-                }}
-              >
-                <span>{isActive ? '✓ ' : ''}{tag}</span>
-                <span style={{ opacity: 0.5, fontSize: '10px' }}>{count}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function FilterBar({ posts, activeFilter, onFilter, showSort, sortOrder, onSort, onBack }) {
+  const [showAllTags, setShowAllTags] = useState(false);
+
   const tagCounts = deriveTagCounts(posts);
   const topTags = tagCounts.slice(0, TOP_TAGS);
   const moreTags = tagCounts.slice(TOP_TAGS);
@@ -116,21 +27,24 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
     return {
       fontFamily: "'Courier New', monospace",
       fontSize: '12px',
-      letterSpacing: '1px',
+      letterSpacing: '1.5px',
       textTransform: 'uppercase',
-      padding: '7px 16px',
+      padding: '8px 18px',
       borderRadius: '20px',
       border: isActive
-        ? '1.5px solid rgba(196,160,80,0.8)'
-        : '1.5px solid rgba(196,160,80,0.4)',
+        ? '2px solid rgba(196,160,80,0.9)'
+        : '2px solid rgba(196,160,80,0.55)',
       background: isActive
-        ? 'rgba(196,160,80,0.18)'
-        : 'rgba(196,160,80,0.06)',
-      color: isActive ? '#a07828' : '#c4a050',
+        ? 'rgba(196,160,80,0.22)'
+        : 'rgba(196,160,80,0.10)',
+      color: isActive ? '#8a6518' : '#b08830',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
       whiteSpace: 'nowrap',
-      fontWeight: isActive ? '600' : '400',
+      fontWeight: '700',
+      boxShadow: isActive
+        ? '0 2px 10px rgba(196,160,80,0.25)'
+        : '0 1px 4px rgba(196,160,80,0.10)',
     };
   }
 
@@ -138,21 +52,24 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
     return {
       fontFamily: "'Courier New', monospace",
       fontSize: '12px',
-      letterSpacing: '1px',
+      letterSpacing: '1.5px',
       textTransform: 'uppercase',
-      padding: '7px 18px',
+      padding: '8px 20px',
       borderRadius: '20px',
       border: isActive
-        ? '1.5px solid rgba(130,50,60,0.75)'
-        : '1.5px solid rgba(130,50,60,0.35)',
+        ? '2px solid rgba(130,50,60,0.85)'
+        : '2px solid rgba(130,50,60,0.45)',
       background: isActive
-        ? 'rgba(130,50,60,0.16)'
-        : 'rgba(130,50,60,0.07)',
-      color: isActive ? '#b8415a' : '#9e4455',
+        ? 'rgba(130,50,60,0.18)'
+        : 'rgba(130,50,60,0.09)',
+      color: isActive ? '#9a2535' : '#8c3040',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
       whiteSpace: 'nowrap',
       fontWeight: '700',
+      boxShadow: isActive
+        ? '0 2px 10px rgba(130,50,60,0.22)'
+        : '0 1px 4px rgba(130,50,60,0.10)',
     };
   }
 
@@ -174,6 +91,21 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
       opacity: isActive ? 1 : 0.75,
     };
   }
+
+  const expandBtn = {
+    fontFamily: "'Courier New', monospace",
+    fontSize: '11px',
+    letterSpacing: '1px',
+    textTransform: 'uppercase',
+    padding: '4px 12px',
+    borderRadius: '20px',
+    border: '1.5px solid rgba(160,144,106,0.55)',
+    background: showAllTags ? 'rgba(160,144,106,0.14)' : 'rgba(160,144,106,0.07)',
+    color: '#7a6d52',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    fontWeight: '700',
+  };
 
   return (
     <div style={{
@@ -197,7 +129,7 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
         </button>
       </div>
 
-      {/* Top tags + more dropdown */}
+      {/* Top tags + inline expand */}
       {tagCounts.length > 0 && (
         <div style={{
           display: 'flex',
@@ -207,17 +139,25 @@ export default function FilterBar({ posts, activeFilter, onFilter, showSort, sor
           alignItems: 'center',
           maxWidth: '760px',
         }}>
-          {topTags.map(({ tag, count }) => (
+          {topTags.map(({ tag }) => (
             <button key={tag} onClick={() => onFilter(tag)} style={tagBtn(tag)}>
-              {tag} <span style={{ opacity: 0.6 }}>({count})</span>
+              {tag}
             </button>
           ))}
-          {moreTags.length > 0 && (
-            <TagMoreDropdown
-              tags={moreTags}
-              activeFilter={activeFilter}
-              onFilter={onFilter}
-            />
+          {moreTags.length > 0 && !showAllTags && (
+            <button onClick={() => setShowAllTags(true)} style={expandBtn}>
+              +{moreTags.length} more
+            </button>
+          )}
+          {showAllTags && moreTags.map(({ tag }) => (
+            <button key={tag} onClick={() => onFilter(tag)} style={tagBtn(tag)}>
+              {tag}
+            </button>
+          ))}
+          {showAllTags && (
+            <button onClick={() => setShowAllTags(false)} style={expandBtn}>
+              ✕ less
+            </button>
           )}
         </div>
       )}

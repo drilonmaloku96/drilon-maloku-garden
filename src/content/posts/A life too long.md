@@ -1,3 +1,12 @@
+---
+title: "A Life Too Long"
+date: 2026-03-23
+type: creative
+language: english
+tags: [creative-writing]
+related: []
+---
+
 The man clipped his nose hairs in front of the bathroom mirror. He usually doesn't mind them, nor does he notice them becoming too long- But the quiet voice of his wife advised him to clip them in the morning as he was reading the newspaper. He had folded the paper neatly and had placed it beside his half-drank coffee. What is left of it, he would be enjoying cold. He usually would protest against such a wish of his wife when he is enjoying his preferred form of mental stimulation, but recently that had changed. 
 He did his best with the hairs, but had to redo some parts of it after examining himself with his glasses. They didn’t protrude disgustingly from his nostrils anymore. His eyes wandered upwards to the bald top of his head, which reflected the harsh ceiling light. This bald surface was encircled on three sides with the remaining white and grey hair and frontally with his thinning eyebrows. His blue eyes were droopy and disinterested. Eyebags sagged heavily and the lower eyelids were watery. He gave off a sorry impression and he didn’t enjoy it. His thin lips curved in distaste under a patch of wiry mustache.
 He had enough of his reflection, switched off the light and went to his table. He started reading his newspaper again and sipped on his cold coffee. Advising, the wife did gladly- but she didn't seem to want to compliment him for being so well-kept. He said nothing. He did wait patiently though, on some off-chance of a positive commentary. He guessed that he will have to get used to the silence and absence of motivating statements from his beloved wife. It‘s alright, he thought. Sometime even that had to fizzle out.

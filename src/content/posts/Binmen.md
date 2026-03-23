@@ -1,3 +1,11 @@
+---
+title: "Binmen"
+date: 2026-03-23
+type: creative
+language: english
+tags: [creative-writing]
+related: []
+---
 
 A husk of a teenager was soullessly watching into the distance. His colleague a sixty year old man with rounded features.
 

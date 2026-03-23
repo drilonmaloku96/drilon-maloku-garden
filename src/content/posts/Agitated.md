@@ -1,3 +1,12 @@
+---
+title: "Agitated"
+date: 2026-03-23
+type: creative
+language: english
+tags: [creative-writing]
+related: []
+---
+
 Norman was getting ready for work. He looked the weather up on his phone: light snowfall at -4 degrees. He’d known it would be cold. Thick socks were already on, his warm pants and sweater as well. He put on his winter-jacket and gloves. Now he was looking for his new beanie which he had ordered online three weeks ago. It had been lying on the little table in the corridor- the one where there a long mirror hung above it. 
 
 He went to reach for it… but then he hesitated. Lisa didn’t like it. She’s always wanted him to wear her beanie, meaning the one she had bought for him. The one that was out of some wool-like material that ensured a perfectly scratchy head. Her beanie which was porous with many awry fibres that made it look as opposite of neat as it could. The beanie which didn’t keep warm at all because of its porous texture- the wind blew through it like nothing. This beanie was on one of the three little wooden handles atop the mirror.
